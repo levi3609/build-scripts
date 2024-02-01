@@ -8,5 +8,5 @@ git clone https://github.com/LOS-Sweet/local_manifest --depth 1 -b los .repo/loc
 repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
 
 # Run build script 
-chmod u+x scripts/build.sh
-./scripts/build.sh
+chmod u+x build-scripts/build.sh
+./build-scripts/build.sh
