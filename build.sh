@@ -1,22 +1,9 @@
-# Build Script for Alioth(Poco F3)
-
-# Remove local_manifests directory
-rm -rf .repo/local_manifests
-
-# Clone the manifest repository
-git clone https://github.com/LOS-Sweet/local_manifest --depth 1 -b los .repo/local_manifests
-
-# Force sync the repository
-repo sync --force-sync -c -j $(nproc)
-
-# Set up the build environment
+#!/bin/bash
+#envsetup
 source build/envsetup.sh
-
-# Return to the root of the source tree
-croot
-
-# Lunch for alioth device
+make clean
+# lunch command 
 lunch lineage_alioth-user
-
-# Build for alioth device
+export TZ=Asia/Dhaka
+#make command
 mka bacon
