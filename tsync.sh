@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+find .repo -name '*.lock' -delete
+
+needed_device=$(awk -F "path=" '/device\// {print $2}' .repo/local_manifests/* | awk -F '"' '{print $2}')
+needed_kernel=$(awk -F "path=" '/kernel\// {print $2}' .repo/local_manifests/* | awk -F '"' '{print $2}')
+needed_vendor=$(awk -F "path=" '/vendor\// {print $2}' .repo/local_manifests/* | awk -F '"' '{print $2}')
+devices='asus xiaomi realme motorola micromax wingtech oneplus lenovo'
+for device in $devices; do
+	safe_to_remove_device=$(ls device/$device/* -d 2> /dev/null | grep -v $needed_device)
+	safe_to_remove_kernel=$(ls kernel/$device/* -d 2> /dev/null | grep -v $needed_kernel)
+	safe_to_remove_vendor=$(ls vendor/$device/* -d 2> /dev/null | grep -v $needed_vendor)
+	if [[ -n "$safe_to_remove_device" ]]; then rm -rf $safe_to_remove_device; echo removed $safe_to_remove_device; fi
+	if [[ -n "$safe_to_remove_kernel" ]]; then rm -rf $safe_to_remove_kernel; echo removed $safe_to_remove_kernel; fi
+	if [[ -n "$safe_to_remove_vendor" ]]; then rm -rf $safe_to_remove_vendor; echo removed $safe_to_remove_vendor; fi
+done
+
 a=$(grep 'Cannot remove project' sync.log -m1|| true)
 b=$(grep "^fatal: remove-project element specifies non-existent project" sync.log -m1 || true)
 c=$(grep 'repo sync has finished' sync.log -m1 || true)
